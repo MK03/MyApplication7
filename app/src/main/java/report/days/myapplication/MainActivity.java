@@ -1,34 +1,31 @@
 package report.days.myapplication;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.Context;
+
+
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Canvas;
+
 import android.graphics.Color;
-import android.graphics.ColorFilter;
-import android.graphics.Paint;
-import android.graphics.drawable.Drawable;
+
+
 import android.net.Uri;
 import android.os.Handler;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.TextInputEditText;
+
+
+
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.Layout;
+
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.Adapter;
-import android.widget.AdapterView;
+
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.GridLayout;
+
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -37,26 +34,24 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-import java.sql.Time;
-import java.util.Calendar;
-import java.util.Date;
 
-import static java.lang.Integer.lowestOneBit;
-import static java.lang.Integer.parseInt;
+import java.util.Calendar;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
+
 
 public class MainActivity extends AppCompatActivity implements RadioGroup.OnCheckedChangeListener {
 
-    private RadioGroup mRadioGroup;
+
     private int NowCheck, NowDate;
     private EditText editText2;
     private LinearLayout LLAddData;
-    private LinearLayout LLTeisyutsu;
+
+    //全体編集
+    private LinearLayout LLTeisyutsu = findViewById(R.id.LLTeisyutsu);
 
     private String Nippou;
-    private int SagyouKaishiZikoku;
 
-
-    private EditText button3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,21 +59,36 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
         setContentView(R.layout.activity_main);
         SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.DaysReport), MODE_PRIVATE);
 
-        EditText editTextBikou=(EditText)findViewById(R.id.editTextBikou);
-        editTextBikou.setText(sharedPreferences.getString("Bikou",""));
+        //備考テキストボックス
+        EditText editTextBikou=findViewById(R.id.editTextBikou);
+
+        //備考読み込み
+        editTextBikou.setText(sharedPreferences.getString(getString(R.string.Bikou),getString(R.string.NullMozi)));
 
         // RadioGroupをメンバ変数に保存しておく
-        mRadioGroup = (RadioGroup) findViewById(R.id.radioButtons);
+        RadioGroup mRadioGroup = findViewById(R.id.radioButtons);
         mRadioGroup.setOnCheckedChangeListener(this);
-        editText2 = (EditText) findViewById(R.id.editText2);
-        LLAddData = (LinearLayout) findViewById(R.id.LLAddData);
-        LLTeisyutsu = (LinearLayout) findViewById(R.id.LLTeisyutsu);
-        RadioButton VE = (RadioButton) findViewById(R.id.radioButton3);
 
-        NowCheck = 1;
+        //作業名登録
+        editText2 = findViewById(R.id.editText2);
 
-        Spinner spneerZi = (Spinner) findViewById(R.id.spinnerZi);
-        Spinner spneerHun = (Spinner) findViewById(R.id.spinnerHun);
+        //各作業内容編集
+        LLAddData =  findViewById(R.id.LLAddData);
+
+        //作業登録ラジオボタン　
+        RadioButton VE;
+        VE = findViewById(R.id.radioButton3);
+
+
+        //時スピナー
+        AtomicReference<Spinner> spinnerZi = new AtomicReference<>(findViewById(R.id.spinnerZi));
+
+        //分スピナー
+        AtomicReference<Spinner> spinnerHun;
+        spinnerHun = new AtomicReference<>(findViewById(R.id.spinnerHun));
+
+
+        //時分アダプター設定
         ArrayAdapter<String> adapterZi = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
         adapterZi.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         ArrayAdapter<String> adapterHun = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
@@ -98,85 +108,44 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
 
         adapterHun.addAll(stringsHun);
 
-        spneerZi.setAdapter(adapterZi);
-        spneerHun.setAdapter(adapterHun);
+        spinnerZi.get().setAdapter(adapterZi);
+        spinnerHun.get().setAdapter(adapterHun);
 
 
-        EditText editText3 = (EditText) findViewById(R.id.editText3);
-        editText3.setText("" + sharedPreferences.getInt(getString(R.string.WarikomiSagyousuu), 0));
+        //設定中の作業数取得
+        EditText editText3 =  findViewById(R.id.editText3);
+        editText3.setText( sharedPreferences.getInt(getString(R.string.WarikomiSagyousuu), 0));
 
-
-        Button button = (Button) findViewById(R.id.buttonShinki);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-
-                SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.DaysReport), MODE_PRIVATE);
-
-                String oldData = sharedPreferences.getString(getString(R.string.TheTimeOfStart), "");
-                String[] sp = oldData.split("/");
-                int count = 0;
-                String timer0 = "";
-                for (String timer : sp) {
-                    if (sharedPreferences.getInt("Count" + timer, 0) <= -1)
-                        timer0 = timer;
-                    else count++;
-
-                }
-
-                if (!timer0.equals("")) {
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putInt("Count" + timer0, 0);
-                    editor.apply();
-
-
-                }
-                tagstr="";
-
-                Spinner spinner = (Spinner) findViewById(R.id.spinner);
-
-
-                Calendar cal = Calendar.getInstance();
-
-                int nowTime = cal.get(Calendar.HOUR_OF_DAY) * 100 + cal.get(Calendar.MINUTE);
-
-
-                SetData(spinner.getSelectedItem().toString(), nowTime, 0);
-
-            }
-        });
-        Button button2 = (Button) findViewById(R.id.button);
-        button2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        //新規作業開始ボタン
+        Button button =  findViewById(R.id.buttonShinki);
+        button.setOnClickListener(this::onClick);
+        Button button2 =  findViewById(R.id.button);
+        button2.setOnClickListener(view -> {
 
 
 
-                Spinner spinner = (Spinner) findViewById(R.id.spinner2);
-
-                Spinner spinnerZi = (Spinner) findViewById(R.id.spinnerZi);
-                Spinner spinnerHun = (Spinner) findViewById(R.id.spinnerHun);
-
-                String ZiStr = spinnerZi.getSelectedItem().toString();
-                String HunStr = spinnerHun.getSelectedItem().toString();
-
-
-                int nowTime = Integer.parseInt(ZiStr) * 100 + Integer.parseInt(HunStr);
-
-                EditText editTextSagyousuuNow = (EditText) findViewById(R.id.editText3);
-                String workNumStr = editTextSagyousuuNow.getText().toString();
-                int worknum = 0;
-                if (checkNumOrText(workNumStr))
-                    worknum = Integer.parseInt(workNumStr);
+            Spinner spinner = findViewById(R.id.spinner2);
+/*
+            Spinner spinnerZi =  findViewById(R.id.spinnerZi);
+            Spinner spinnerHun =  findViewById(R.id.spinnerHun);
+*/
+            String ZiStr = spinnerZi.get().getSelectedItem().toString();
+            String HunStr = spinnerHun.get().getSelectedItem().toString();
 
 
-                SetData(spinner.getSelectedItem().toString(), nowTime, worknum);
+            int nowTime = Integer.parseInt(ZiStr) * 100 + Integer.parseInt(HunStr);
 
-            }
+            String workNumStr = editText3.getText().toString();
+            int worknum = 0;
+            if (checkNumOrText(workNumStr))
+                worknum = Integer.parseInt(workNumStr);
+
+
+            SetData(spinner.getSelectedItem().toString(), nowTime, worknum);
+
         });
 
-    Button buttonSakujo = (Button) findViewById(R.id.buttonSakujo);
+    Button buttonSakujo =  findViewById(R.id.buttonSakujo);
         buttonSakujo.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -294,6 +263,7 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
                                         }
                                     }
                                     editor.putString(getString(R.string.TheTimeOfStart), "");
+                                    editor.putString("Bikou", "");
                                     LLAddData.setVisibility(View.INVISIBLE);
 
                                     LLTeisyutsu.setVisibility(View.VISIBLE);
@@ -471,7 +441,7 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
 
                 editor.putString(getString(R.string.WorkName), wn);
                 editor.apply();
-             
+
                 MakeAddData();
 
                 break;
@@ -724,13 +694,13 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
             }
         else count=-1;
 
-        Spinner spinner = (Spinner) findViewById(R.id.spinner2);
+        Spinner spinner =  findViewById(R.id.spinner2);
 
         spinner.setSelection(count + 1);
 
-        spinner = (Spinner) findViewById(R.id.spinnerZi);
+        spinner =  findViewById(R.id.spinnerZi);
         spinner.setSelection(Integer.parseInt(tag) / 100);
-        spinner = (Spinner) findViewById(R.id.spinnerHun);
+        spinner =  findViewById(R.id.spinnerHun);
         spinner.setSelection(Integer.parseInt(tag) % 100);
 
         EditText editText1 = (EditText) findViewById(R.id.editText3);
@@ -806,4 +776,40 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
 
         }
 
+    private void onClick(View view) {
+        SharedPreferences sharedPreferences1 = getSharedPreferences(getString(R.string.DaysReport), MODE_PRIVATE);
+
+        String oldData = sharedPreferences1.getString(getString(R.string.TheTimeOfStart), "");
+
+        //並んでいる開始時間を/で区切る
+        String[] sp = oldData.split(getString(R.string.divSlash));
+        int count = 0;
+        String timer0 = getString(R.string.NullMozi);
+        for (String timer : sp) {
+            if (sharedPreferences1.getInt("Count" + timer, 0) <= -1)
+                timer0 = timer;
+            else count++;
+
+        }
+
+        if (!timer0.equals("")) {
+            SharedPreferences.Editor editor = sharedPreferences1.edit();
+            editor.putInt("Count" + timer0, 0);
+            editor.apply();
+
+
+        }
+        tagstr = "";
+
+        Spinner spinner = (Spinner) findViewById(R.id.spinner);
+
+
+        Calendar cal = Calendar.getInstance();
+
+        AtomicInteger nowTime = new AtomicInteger();
+        nowTime.set(cal.get(Calendar.HOUR_OF_DAY) * 100 + cal.get(Calendar.MINUTE));
+
+
+        SetData(spinner.getSelectedItem().toString(), nowTime.get(), 0);
     }
+}

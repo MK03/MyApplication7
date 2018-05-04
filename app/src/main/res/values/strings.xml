@@ -22,4 +22,7 @@
     <string name="NippouTeisyutu">上記メールアドレスへ下記内容で日報を提出</string>
     <string name="ButtonSagyouKaishi">下記作業を現時刻から開始</string>
     <string name="ButtonHenshu">編集</string>
+    <string name="Bikou">Bikou</string>
+    <string name="NullMozi" />
+    <string name="divSlash">/</string>
 </resources>
