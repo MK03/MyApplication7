@@ -52,13 +52,14 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
 
     private String Nippou;
 
-
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.DaysReport), MODE_PRIVATE);
-
+        sharedPreferences = getSharedPreferences(getString(R.string.DaysReport), MODE_PRIVATE);
+        editor = sharedPreferences.edit();
         //備考テキストボックス
         EditText editTextBikou=findViewById(R.id.editTextBikou);
 
@@ -119,100 +120,103 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
         //新規作業開始ボタン
         Button button =  findViewById(R.id.buttonShinki);
         button.setOnClickListener(this::onClick);
+
+        //変更ボタン
         Button button2 =  findViewById(R.id.button);
         button2.setOnClickListener(view -> {
-
-
-
+            //編集モードのスピナー
             Spinner spinner = findViewById(R.id.spinner2);
 /*
             Spinner spinnerZi =  findViewById(R.id.spinnerZi);
             Spinner spinnerHun =  findViewById(R.id.spinnerHun);
 */
+            //選ばれているスピナー設定時刻
             String ZiStr = spinnerZi.get().getSelectedItem().toString();
             String HunStr = spinnerHun.get().getSelectedItem().toString();
 
-
+            //スピナーによる設定時刻を数値化
             int nowTime = Integer.parseInt(ZiStr) * 100 + Integer.parseInt(HunStr);
 
+            //作業数の文字列
             String workNumStr = editText3.getText().toString();
             int worknum = 0;
-            if (checkNumOrText(workNumStr))
-                worknum = Integer.parseInt(workNumStr);
+            if (checkNumOrText(workNumStr))//作業数が数値列
+                worknum = Integer.parseInt(workNumStr);//数値化
 
-
+            //データをセット
             SetData(spinner.getSelectedItem().toString(), nowTime, worknum);
 
         });
-
-    Button buttonSakujo =  findViewById(R.id.buttonSakujo);
-        buttonSakujo.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-
+        //削除ボタン
+        Button buttonSakujo =  findViewById(R.id.buttonSakujo);
+        buttonSakujo.setOnClickListener(view -> {
+            //データ削除
             Sakujo();
 
+            //表を作り直す
             DeleteButtonsMake();
 
-            LLAddData.setVisibility(View.INVISIBLE);
-            LLTeisyutsu.setVisibility(View.VISIBLE);
-            SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.DaysReport), MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.remove("tag");
-            editor.apply();
-        }
-    });
+            //票に戻る
+            EditToList();
+        });
+
+        //作業数１加算ボタン
         Button button3 = (Button) findViewById(R.id.button3);
         button3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
+                //テキストボックス
+                EditText editText3 =findViewById(R.id.editText3);
 
-                EditText editText3 = (EditText) findViewById(R.id.editText3);
+                //テキストボックスの文字列
                 String str = editText3.getText().toString();
 
                 int now = 0;
 
+                //テキストボックスがブランクなら1
                 if (str.equals(""))
                     now = 1;
-                else if (checkNumOrText(str)) {
-                    now = Integer.parseInt(str);
-                    now++;
+                else if (checkNumOrText(str)) {//テキストボックスの内容を確認
+                    now = Integer.parseInt(str);//数値なら数値化
+                    now++;//加算
 
                 }
-                editText3.setText("" + now);
+                //セット
+                editText3.setText( now);
             }
         });
-        Button ButtonCancel = (Button) findViewById(R.id.ButtonCancel);
+
+        //編集せず戻るボタン
+        Button ButtonCancel =  findViewById(R.id.ButtonCancel);
         ButtonCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                LLTeisyutsu.setVisibility(View.VISIBLE);
-                LLAddData.setVisibility(View.INVISIBLE);
-
-                SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.DaysReport), MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.remove("tag");
-                editor.apply();
-
+                EditToList();
             }
         });
 
-
+        //メーラー起動ボタン
         Button buttonTeisyutsu = (Button) findViewById(R.id.buttonTeisyutsu);
         buttonTeisyutsu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.DaysReport), MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
+
+               //メールアドレスを記入
                 EditText editTextMailAddress = (EditText) findViewById(R.id.editTextMailAddress);
+
+                //メールアドレスを保存
                 editor.putString(getString(R.string.Mail), editTextMailAddress.getText().toString());
                 editor.apply();
 
                 Intent intent = new Intent();
                 intent.setAction(Intent.ACTION_SENDTO);
 
-                Calendar cal = Calendar.getInstance(); String bikou=((EditText)findViewById(R.id.editTextBikou)).getText().toString();
+                //本日の日付
+                Calendar cal = Calendar.getInstance();
+
+                //備考
+                String bikou=((EditText)findViewById(R.id.editTextBikou)).getText().toString();
                 Nippou = Nippou + "\n備考\n" + bikou;
                 intent.setType("text/plain");
                 intent.setData(Uri.parse("mailto:" + editTextMailAddress.getText().toString()));
@@ -225,22 +229,17 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
             }
         });
 
+        //作業名
         String sher = sharedPreferences.getString(getString(R.string.WorkName), "");
-        SharedPreferences.Editor editor = sharedPreferences.edit();
+
         editText2.setText(sher);
 
-
-
-
+        //タイマーによる日付変更時のデータ削除手続き
         final Handler handler = new Handler();
         final Runnable r = new Runnable() {
 
             @Override
             public void run() {
-                SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.DaysReport), MODE_PRIVATE);
-
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-
 
                 int lastDate = sharedPreferences.getInt(getString(R.string.LastDate), 0);
                 Calendar cal = Calendar.getInstance();
@@ -254,7 +253,7 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
                                     SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.DaysReport), MODE_PRIVATE);
-                                    SharedPreferences.Editor editor = sharedPreferences.edit();
+
                                     String[] sp = sharedPreferences.getString(getString(R.string.TheTimeOfStart), "").split("\n");
                                     for (String gotTime : sp) {
                                         if (!gotTime.equals("")) {
@@ -264,9 +263,8 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
                                     }
                                     editor.putString(getString(R.string.TheTimeOfStart), "");
                                     editor.putString("Bikou", "");
-                                    LLAddData.setVisibility(View.INVISIBLE);
-
-                                    LLTeisyutsu.setVisibility(View.VISIBLE);
+                                    editor.apply();
+                                    EditToList();
                                     DeleteButtonsMake();
                                 }
                             })
@@ -319,6 +317,20 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
 
 
     }
+
+    private void EditToList()
+    {
+        LLTeisyutsu.setVisibility(View.VISIBLE);
+        LLAddData.setVisibility(View.INVISIBLE);
+
+        SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.DaysReport), MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.remove("tag");
+        editor.apply();
+
+
+    }
+
 
     private String Sagyoumei;
     private int HM;
