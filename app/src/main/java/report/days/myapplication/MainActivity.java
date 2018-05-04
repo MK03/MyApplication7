@@ -471,7 +471,7 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
 
                 editor.putString(getString(R.string.WorkName), wn);
                 editor.apply();
-                /* */
+             
                 MakeAddData();
 
                 break;
