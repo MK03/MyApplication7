@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">日報メーカー</string>
+    <string name="Sakujo">削除</string>
+    <string name="WorkName">WorkName</string>
+    <string name="WarikomiSagyousuu">WarikomiSagyousuu</string>
+    <string name="mitei">未定</string>
+
+    <string name="DaysReport">DaysReport</string>
+
+    <string name="LastDate">LastDate</string>
+    <string name="TheTimeOfStart">TheTimeOfStart</string>
+    <string name="Mail">mail</string>
+    <string name="RadioButtonSagyoumeiTouroku">作業名登録  </string>
+    <string name="RadioButtonSagyouTouroku">作業登録・編集・日報提出</string>
+    <string name="ButtonHenkou">変更</string>
+    <string name="ButtonIchiKasan">1加算</string>
+    <string name="TextViewSagyoumei">作業名　：</string>
+    <string name="TextViewSagyousuu">作業数　：</string>
+    <string name="TextViewKaishiZikoku">開始時刻：</string>
+    <string name="TextViewZi">時</string>
+    <string name="TextViewHun">分</string>
+    <string name="NippouTeisyutu">上記メールアドレスへ下記内容で日報を提出</string>
+    <string name="ButtonSagyouKaishi">下記作業を現時刻から開始</string>
+    <string name="ButtonHenshu">編集</string>
+</resources>
