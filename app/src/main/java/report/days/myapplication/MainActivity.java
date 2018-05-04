@@ -465,6 +465,7 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
                 editText2.setVisibility(View.INVISIBLE);
                 LLAddData.setVisibility(View.INVISIBLE);
                 wn = editText2.getText().toString();
+                if(!wn.equals(""))
                 if (wn.substring(wn.length() - 1).equals("\n"))
                     wn = wn.substring(0, wn.length() - 2);
 
