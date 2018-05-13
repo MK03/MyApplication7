@@ -2,7 +2,7 @@ package report.days.myapplication;
 
 public class Data {
     private String WorkName;
-    private int TheTime;
+    private int TheTime,EndTime;
     private int Count;
     private Data NextData;
 
@@ -11,7 +11,7 @@ public class Data {
         WorkName=workName;
         TheTime=time;
         Count=count;
-
+        EndTime=-1;
         NextData=nextData;
 
     }
@@ -59,5 +59,7 @@ public class Data {
     public  int getTheTime(){return TheTime;}
     public int getCount(){return Count;}
     public String getWorkName(){return WorkName;}
+    public int getEndTime(){return EndTime;}
+    public void setEndTime(int val){EndTime=val;}
 
 }
