@@ -13,14 +13,15 @@
     <string name="RadioButtonSagyoumeiTouroku">作業名登録  </string>
     <string name="RadioButtonSagyouTouroku">作業登録・編集・日報提出</string>
     <string name="ButtonHenkou">変更</string>
-    <string name="ButtonIchiKasan">1加算</string>
+    <string name="ButtonIchiKasan">加算</string>
     <string name="TextViewSagyoumei">作業名　：</string>
     <string name="TextViewSagyousuu">作業数　：</string>
     <string name="TextViewKaishiZikoku">開始時刻：</string>
+    <string name="TextViewShuryoZikoku">終了時刻：</string>
     <string name="TextViewZi">時</string>
     <string name="TextViewHun">分</string>
     <string name="NippouTeisyutu">上記メールアドレスへ下記内容で日報を提出</string>
-    <string name="ButtonSagyouKaishi">下記作業を現時刻から開始</string>
+    <string name="ButtonSagyouKaishi">現在の作業を終了</string>
     <string name="ButtonHenshu">編集</string>
     <string name="Bikou">Bikou</string>
     <string name="NullMozi" />

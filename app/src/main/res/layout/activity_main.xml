@@ -10,47 +10,42 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-    <RadioGroup
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/radioButtons"
-        android:orientation="horizontal"
-        >
 
-        <RadioButton
-            android:id="@+id/radioButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-
-            android:text="@string/RadioButtonSagyoumeiTouroku" />
-
-
-
-        <RadioButton
-            android:id="@+id/radioButton3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-
-            android:text="@string/RadioButtonSagyouTouroku" ><requestFocus />
-        </RadioButton>
-    </RadioGroup>
 <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:id="@+id/LLWorkList"
+    >
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/ButtonToList"
+        android:text="作業リストへ"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="作業名：(改行で区切る)"
+        />
   <EditText
-        android:id="@+id/editText2"
+
+        android:id="@+id/editTextWorkNames"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:ems="10"
+      android:background="#FFFF8800"
         android:inputType="textMultiLine" />
+</LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:id="@+id/LLAddData"
+        android:id="@+id/LLEditData"
 
         >
 
@@ -59,27 +54,64 @@
             android:layout_height="wrap_content"
             android:id="@+id/TextViewBefore"
             android:text="" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/TextViewBefore2"
+            android:text="" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/TextViewBack"
+            android:text="" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/TextViewNext"
+            android:text="" />
 
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text=" "
-            />
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:background="#FFFF8800"
-        >
 
-        <TextView
-            android:layout_width="wrap_content"
+        />
+
+
+
+        <RadioGroup
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:id="@+id/radioGroupUwagakiWarikomi"
+            >
+            <RadioButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="上記内容を、下記内容に上書きする"
+                android:id="@+id/radioButtonUwagaki"
+                />
 
-            android:text="@string/TextViewSagyoumei" />
+            <RadioButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="上記内容を上書きせず残し、下記内容を割り込みさせる"
+                android:id="@+id/radioButtonWarikomi"
+                />
+        </RadioGroup>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="#FFFF8800"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:text="@string/TextViewSagyoumei" />
         <Spinner
-            android:id="@+id/spinner2"
+            android:id="@+id/spinnerWorkNameEdit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             />
@@ -93,7 +125,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:background="#FF0088FF"
+
             >
 
             <TextView
@@ -102,12 +134,7 @@
 
                 android:text="@string/TextViewSagyousuu" />
 
-            <Button
-                android:id="@+id/button3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
 
-                android:text="@string/ButtonIchiKasan" />
             <EditText
                 android:id="@+id/editText3"
                 android:layout_width="match_parent"
@@ -117,6 +144,41 @@
 
 
         </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+
+            >
+
+            <Button
+                android:id="@+id/buttonAddWork"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:text="上の値へ下の値を加算" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" "
+                />
+            <Button
+                android:id="@+id/buttonDecWork"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:text="上の値から下の値を減算" />
+
+
+
+        </LinearLayout>
+        <EditText
+            android:id="@+id/editTextAddWork"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:inputType="number" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -162,12 +224,58 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text=" "
+            />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="#FFCCCCCC"
+            android:id="@+id/LLEditEndTime"
+            >
+            <TextView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/TextViewShuryoZikoku"
+                />
+            <Spinner
+                android:id="@+id/spinnerEndZi"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <TextView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/TextViewZi"
+                />
+            <Spinner
+                android:id="@+id/spinnerEndHun"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/TextViewHun"
+                />
+        </LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
 
             android:text=" "
             />
-        <Button
-            android:id="@+id/button"
+        <LinearLayout
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+        <Button
+            android:id="@+id/buttonHenkou"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/ButtonHenkou" />
         <TextView
@@ -177,7 +285,7 @@
             />
         <Button
             android:id="@+id/buttonSakujo"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="変更前の内容を削除" />
         <TextView
@@ -187,9 +295,10 @@
             />
         <Button
             android:id="@+id/ButtonCancel"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="変更せず戻る" />
+        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
@@ -197,7 +306,30 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+        <Button
+            android:layout_width="0dp"
+            android:layout_weight="5"
+            android:layout_height="wrap_content"
+            android:id="@+id/ButtonToNameList"
+            android:text="作業名を編集"
+            />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content" />
+            <Button
+            android:layout_width="0dp"
+            android:layout_weight="5"
 
+        android:layout_height="wrap_content"
+        android:id="@+id/ButtonDeleteAll"
+        android:text="全作業登録を削除"
+        /></LinearLayout>
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -208,7 +340,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="1dp"
+            android:textSize="10dp"
             android:text=" "
             />
         <Button
@@ -221,7 +353,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="1dp"
+            android:textSize="10dp"
             android:text=" "
             />
 
@@ -234,6 +366,7 @@
             android:layout_height="0dp"
             android:layout_weight="6"
             android:background="#FFFF8888"
+            android:id="@+id/ScrollView"
             >
 
                 <TableLayout
@@ -247,12 +380,11 @@
 
 
         </ScrollView>
-        <LinearLayout
-            android:background="#FF00FFFF"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -263,57 +395,54 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
 
-            android:id="@+id/editTextBikou"
-
-            /></LinearLayout>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="1dp"
-            android:text=" "
-            />
+            android:id="@+id/editTextBikou"></EditText>
+</LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" "
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                ><requestFocus/></TextView>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#FFFF88FF"
+                >
         <Button
-            android:id="@+id/buttonShinki"
+            android:id="@+id/buttonEnd"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
 
             android:text="@string/ButtonSagyouKaishi"
 
             />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="1dp"
-            android:text=" "
-            />
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
 
-            android:orientation="horizontal"
-            android:background="#FFFF8800"
-            >
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
-                android:text="@string/TextViewSagyoumei" />
-
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:id="@+id/LLBegin"
+                    >
+<Button
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:id="@+id/buttonBegin"
+    android:text="右の作業を開始"
+    />
             <Spinner
                 android:id="@+id/spinner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 />
-        </LinearLayout>
-
+    </LinearLayout>
+</RelativeLayout>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="1dp"
+            android:textSize="10dp"
             android:text=" "
             />
-
 
     </LinearLayout>
 
