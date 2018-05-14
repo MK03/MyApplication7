@@ -88,50 +88,52 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
                 // mHandlerを通じてUI Threadへ処理をキューイング
                 mHandler.post( new Runnable() {
                     public void run() {
-    
+
                         //カレンダー取得
                         Calendar cal = Calendar.getInstance();
 
                         //現在時を取得
-                        int nt = cal.get(Calendar.HOUR_OF_DAY)*100+ cal.get(Calendar.MINUTE);
+                        int nt = cal.get(Calendar.HOUR_OF_DAY) * 100 + cal.get(Calendar.MINUTE);
 
                         //
-                        boolean act=false;
+                        boolean act = false;
 
                         //時間表を取得
                         String oldData = sharedPreferences.getString(getString(R.string.TheTimeOfStart), "");
-                        
-                        //時間表を分割
-                        String[] sp=oldData.split("/");
-                        
-                        //各時間ごとに処理
-                        for(String sp2:sp) {
-                            
-                            //その時間が現在より先ならば
-                            if(Integer.parseInt(sp2)>nt) {
+                        if (!oldData.equals("")) {
+                            //時間表を分割
+                            String[] sp = oldData.split("/");
 
-                                //時間表を空欄に置き換える
-                                oldData=oldData.replace(sp2+"/","");
-                                
-                                //作業名、作業数、終了時刻を削除
-                                editor.remove("Name" + sp2);
-                                editor.remove("Count" + sp2);
-                                editor.remove("End" + sp2);
-                                editor.putString(getString(R.string.TheTimeOfStart), oldData);
-                               
-                                act=true;
+                            //各時間ごとに処理
+
+                                for (String sp2 : sp) {
+
+                                    //その時間が現在より先ならば
+                                    if (Integer.parseInt(sp2) > nt) {
+
+                                        //時間表を空欄に置き換える
+                                        oldData = oldData.replace(sp2 + "/", "");
+
+                                        //作業名、作業数、終了時刻を削除
+                                        editor.remove("Name" + sp2);
+                                        editor.remove("Count" + sp2);
+                                        editor.remove("End" + sp2);
+                                        editor.putString(getString(R.string.TheTimeOfStart), oldData);
+
+                                        act = true;
+                                    }
+                                }
+                            if (act) {
+
+                                //置き換え、削除があったら、アプライし、リストも作りなおす
+                                editor.apply();
+                                DeleteButtonsMake();
                             }
-                        }
-                        if(act) {
-
-                            //置き換え、削除があったら、アプライし、リストも作りなおす
-                            editor.apply();
-                            DeleteButtonsMake();
                         }
                     }
                 });
             }
-        }, 1, 100);
+        }, 10000, 10000);
 
 
 
